@@ -1,0 +1,67 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+
+class Result {
+
+    /*
+     * Complete the 'pickingNumbers' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts INTEGER_ARRAY a as parameter.
+     */
+
+    
+    public static int pickingNumbers(List<Integer> a) {
+    // Create a frequency array of size 101 because values range from 0 to 100 inclusive
+    int[] freq = new int[101];
+    
+    // Count the frequency of each number in the input list
+    for (int num : a) {
+        freq[num]++;  // Increment count for this number
+    }
+
+    int maxLength = 0;
+    
+    // Iterate through possible values (1 to 100)
+    for (int i = 1; i < freq.length; i++) {
+        // Calculate the maximum length of a subarray where all elements
+        // have values i or i-1 (difference at most 1)
+        maxLength = Math.max(maxLength, freq[i] + freq[i - 1]);
+    }
+
+    // Return the maximum length found
+    return maxLength;
+}
+}
+
+
+
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = Integer.parseInt(bufferedReader.readLine().trim());
+
+        List<Integer> a = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+            .map(Integer::parseInt)
+            .collect(toList());
+
+        int result = Result.pickingNumbers(a);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
